@@ -1,0 +1,266 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>reveal.js</title>
+
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/black.css">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="lib/css/monokai.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+      document.getElementsByTagName('head')[0].appendChild(link);
+    </script>
+</head>
+<body>
+<div class="reveal">
+    <div class="slides">
+        <section>
+            <h1>JS performance</h1>
+            <p>
+                under the microscope
+            </p>
+        </section>
+        <section>
+            Optimizing property access
+        </section>
+        <section>
+            <pre class="hljs">
+                <code data-line-numbers data-trim>
+                    const object = {
+                        x: 1,
+                        y: 2,
+                    };
+
+                    doSomething(object.x);
+                </code>
+            </pre>
+        </section>
+
+        <section>
+            How the JS engines optimize our code?
+        </section>
+
+        <section data-transition="none">
+            <pre class="hljs">
+                <code data-line-numbers data-trim>
+                    function calculate() {
+                      const start = Date.now();
+                      const N = 1e6;
+
+                      let i = '12345', j;
+
+                      for (let n = 0; n < N; n++) {
+                        j = ~~i;
+                      }
+
+                      return (Date.now() - start) / N;
+                    }
+                </code>
+            </pre>
+        </section>
+
+        <section data-transition="none">
+            <pre class="hljs">
+                <code data-line-numbers="5,8" data-trim>
+                    function calculate() {
+                      const start = Date.now();
+                      const N = 1e6;
+
+                      let j;
+
+                      for (let n = 0; n < N; n++) {
+                        j = ~~'12345';
+                      }
+
+                      return (Date.now() - start) / N;
+                    }
+                </code>
+            </pre>
+        </section>
+
+        <section data-transition="none">
+            <pre class="hljs">
+                <code data-line-numbers="8" data-trim>
+                    function calculate() {
+                      const start = Date.now();
+                      const N = 1e6;
+
+                      let j;
+
+                      for (let n = 0; n < N; n++) {
+                        j = 12345;
+                      }
+
+                      return (Date.now() - start) / N;
+                    }
+                </code>
+            </pre>
+        </section>
+
+        <section>
+            <h3>Constant propagation</h3>
+        </section>
+
+        <section data-transition="none">
+            <pre class="hljs">
+                <code data-line-numbers data-trim>
+                    function calculate() {
+                      const start = Date.now();
+                      const N = 1e6;
+
+                      let i = Date.now().toString(), j;
+                      //  ^ not a constant anymore
+
+                      for (let n = 0; n < N; n++) {
+                        j = ~~i;
+                      }
+
+                      return (Date.now() - start) / N;
+                    }
+                </code>
+            </pre>
+        </section>
+
+        <section data-transition="none">
+            <pre class="hljs">
+                <code data-line-numbers="6,7,10" data-trim>
+                    function calculate() {
+                      const start = Date.now();
+                      const N = 1e6;
+
+                      let i = Date.now().toString(), j;
+                      let j0 = ~~i;
+                      //  ^^^^^^^^ hoisted from the loop
+
+                      for (let n = 0; n < N; n++) {
+                        j = j0;
+                      }
+
+                      return (Date.now() - start) / N;
+                    }
+                </code>
+            </pre>
+        </section>
+
+        <section>
+            <h3>Loop invariant code motion</h3>
+        </section>
+
+        <section data-transition="none">
+            <pre class="hljs">
+                <code data-line-numbers data-trim data-noescape>
+                    function calculate() {
+                      const start = Date.now();
+                      const N = 1e6;
+
+                      let i = Date.now().toString(), <mark>j</mark>;
+                      let j0 = ~~i;
+
+                      for (let n = 0; n < N; n++) {
+                        <mark>j = j0</mark>;
+                      }
+
+                      return (Date.now() - start) / N;
+                    }
+                </code>
+            </pre>
+        </section>
+
+        <section data-transition="none">
+            <pre class="hljs">
+                <code data-line-numbers data-trim data-noescape>
+                    function calculate() {
+                      const start = Date.now();
+                      const N = 1e6;
+
+                      let i = Date.now().toString(), <mark>j</mark>;
+                      <mark>let j0 = ~~i;</mark>
+
+                      for (let n = 0; n < N; n++) {
+                        <mark>j = j0</mark>;
+                      }
+
+                      return (Date.now() - start) / N;
+                    }
+                </code>
+            </pre>
+        </section>
+
+        <section data-transition="none">
+            <pre class="hljs">
+                <code data-line-numbers data-trim data-noescape>
+                    function calculate() {
+                      const start = Date.now();
+                      const N = 1e6;
+
+                      let <mark>i = Date.now().toString()</mark>, <mark>j</mark>;
+                      <mark>let j0 = ~~i;</mark>
+
+                      for (let n = 0; n < N; n++) {
+                        <mark>j = j0</mark>;
+                      }
+
+                      return (Date.now() - start) / N;
+                    }
+                </code>
+            </pre>
+        </section>
+
+        <section data-transition="none">
+            <pre class="hljs">
+                <code data-line-numbers="4,5" data-trim data-noescape>
+                    function calculate() {
+                      const start = Date.now();
+                      const N = 1e6;
+
+                      for (let n = 0; n < N; n++) {
+                      }
+
+                      return (Date.now() - start) / N;
+                    }
+                </code>
+            </pre>
+        </section>
+
+        <section>
+            <h3>Dead code elimitation</h3>
+        </section>
+
+        <section>
+            <ul>
+                <li>Constant propagation</li>
+                <li>Loop invariant code motion</li>
+                <li>Dead code elimitation</li>
+            </ul>
+        </section>
+    </div>
+</div>
+
+<script src="js/reveal.js"></script>
+
+<script>
+  // More info about config & dependencies:
+  // - https://github.com/hakimel/reveal.js#configuration
+  // - https://github.com/hakimel/reveal.js#dependencies
+  Reveal.initialize({
+    dependencies: [
+      { src: 'plugin/markdown/marked.js' },
+      { src: 'plugin/markdown/markdown.js' },
+      { src: 'plugin/notes/notes.js', async: true },
+      { src: 'plugin/highlight/highlight.js', async: true }
+    ]
+  });
+</script>
+</body>
+</html>
