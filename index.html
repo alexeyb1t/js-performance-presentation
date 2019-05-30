@@ -31,20 +31,125 @@
                 under the microscope
             </p>
         </section>
+
+        <section>
+            <pre class="hljs">
+                <code data-line-numbers data-trim>
+                      let start = Date.now();
+
+                      let obj = {}, a = 0;
+
+                      Object.defineProperty(obj, 'a', {
+                        get: () => a,
+                        set: val => a = val
+                      });
+
+                      for (let i = 0; i < 1e6; i++) {
+                        obj.a = 2;
+                      }
+
+                      console.log(Date.now() - start);
+                </code>
+            </pre>
+        </section>
+
+        <section>
+            <pre class="hljs">
+                <code data-line-numbers data-trim>
+                    function Box(a) {
+                      this.myProperty = a;
+                    }
+
+                    Box.prototype.get = function () {
+                      return this.myProperty;
+                    };
+
+                    Box.prototype.set = function (val) {
+                      this.myProperty = val;
+                    };
+                </code>
+            </pre>
+        </section>
+
+        <section>
+            <pre class="hljs">
+                <code data-line-numbers data-trim>
+                      let start = Date.now();
+
+                      const obj = {};
+                      obj.a = new Box(0);
+                      for (let i = 0; i < 1e6; i++) {
+                        obj.a.set(2);
+                        obj.a.get();
+                      }
+
+                      console.log(Date.now() - start);
+                </code>
+            </pre>
+        </section>
+
         <section>
             Optimizing property access
         </section>
+
         <section>
             <pre class="hljs">
                 <code data-line-numbers data-trim>
                     const object = {
-                        x: 1,
-                        y: 2,
+                        x: 5,
+                        y: 6,
                     };
 
                     doSomething(object.x);
                 </code>
             </pre>
+        </section>
+
+        <section>
+            <img src="img/shape-1.svg" alt="">
+        </section>
+
+        <section>
+            <img src="img/shape-2.svg" alt="">
+        </section>
+
+        <section>
+            <pre class="hljs">
+                <code data-line-numbers data-trim>
+                    const object = {};
+
+                    object.x = 1;
+                    object.y = 2;
+
+                    doSomething(object.x);
+                </code>
+            </pre>
+        </section>
+
+        <section>
+            <img src="img/shape-chain-2.svg" alt="">
+        </section>
+
+        <section>
+            <img src="img/shape-tree.svg" alt="">
+        </section>
+
+        <section>
+            TODO: slides about the transition change
+        </section>
+
+        <section>
+            What is wrong with the getters and setters?
+        </section>
+
+        <section>
+            Bug in Chrome
+            <img src="img/getter-setter-bug.png" alt="">
+            <a href="https://stackoverflow.com/questions/36338289/object-descriptor-getter-setter-performance-in-recent-chrome-v8-versions">Link to StackOverflow</a>
+        </section>
+
+        <section>
+            The performance is not stable. It might change over time, because something is broken.
         </section>
 
         <section>
@@ -243,6 +348,10 @@
                 <li>Loop invariant code motion</li>
                 <li>Dead code elimitation</li>
             </ul>
+        </section>
+
+        <section>
+            TODO: slides about the compilation stages
         </section>
     </div>
 </div>
