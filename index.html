@@ -53,7 +53,7 @@
             </pre>
         </section>
 
-        <section>
+        <section data-transition="none">
             <img src="img/getter-setter-result.png" alt="">
         </section>
 
@@ -75,7 +75,7 @@
             </pre>
         </section>
 
-        <section>
+        <section data-transition="none">
             <img src="img/prototypes-result.png" alt="">
         </section>
 
@@ -83,9 +83,9 @@
             <h3>Why?</h3>
         </section>
 
-        <section>
+        <section data-transition="none">
             <h3>Optimizing property access</h3>
-            <pre class="hljs">
+            <pre class="javascript">
                 <code data-line-numbers data-trim>
                     const object = {
                         x: 5,
@@ -97,16 +97,16 @@
             </pre>
         </section>
 
-        <section>
+        <section data-transition="none">
             <img src="img/shape-1.svg" alt="">
         </section>
 
-        <section>
+        <section data-transition="none">
             <img src="img/shape-2.svg" alt="">
         </section>
 
-        <section>
-            <pre class="hljs">
+        <section data-transition="none">
+            <pre class="javascript">
                 <code data-line-numbers data-trim>
                     const object = {};
 
@@ -118,16 +118,54 @@
             </pre>
         </section>
 
-        <section>
+        <section data-transition="none">
             <img src="img/shape-chain-2.svg" alt="">
         </section>
 
-        <section>
+        <section data-transition="none">
             <img src="img/shape-tree.svg" alt="">
         </section>
 
+        <section data-transition="none">
+            <pre class="javascript">
+                <code data-line-numbers data-trim>
+                    const object1 = {};
+                    object1.x = 5;
+
+                    const object2 = { x: 6 };
+                </code>
+            </pre>
+        </section>
+
+        <section data-transition="none">
+            <img src="img/empty-shape-bypass.svg" alt="">
+        </section>
+
         <section>
-            TODO: slides about the transition change
+            <h3>Inline Caches (ICs)</h3>
+            <pre class="javascript">
+                <code data-line-numbers data-trim>
+                    function getX(o) {
+                      return o.x;
+                    }
+                </code>
+            </pre>
+        </section>
+
+        <section data-transition="none">
+            <img src="img/ic-1.svg" alt="">
+        </section>
+
+        <section data-transition="none">
+            <img src="img/ic-2.svg" alt="">
+        </section>
+
+        <section data-transition="none">
+            <img src="img/ic-3.svg" alt="">
+        </section>
+
+        <section data-transition="none">
+            <img src="img/ic-4.svg" alt="">
         </section>
 
         <section>
@@ -137,12 +175,12 @@
             </p>
         </section>
 
-        <section>
+        <section data-transition="none">
             <h3>Bug in Chrome</h3>
             <img src="img/getter-setter-bug.png" alt="">
         </section>
 
-        <section>
+        <section data-transition="none">
             <h3>JS engines are buggy</h3>
             <ul>
                 <li>Bugs related to performance do exist</li>
@@ -353,7 +391,7 @@
             <h3>Dead code elimitation</h3>
         </section>
 
-        <section>
+        <section data-transition="none">
             <ul>
                 <li>Constant propagation</li>
                 <li>Loop invariant code motion</li>
