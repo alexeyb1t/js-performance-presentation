@@ -56,24 +56,6 @@
         <section>
             <pre class="hljs">
                 <code data-line-numbers data-trim>
-                    function Box(a) {
-                      this.myProperty = a;
-                    }
-
-                    Box.prototype.get = function () {
-                      return this.myProperty;
-                    };
-
-                    Box.prototype.set = function (val) {
-                      this.myProperty = val;
-                    };
-                </code>
-            </pre>
-        </section>
-
-        <section>
-            <pre class="hljs">
-                <code data-line-numbers data-trim>
                       let start = Date.now();
 
                       const obj = {};
@@ -86,10 +68,6 @@
                       console.log(Date.now() - start);
                 </code>
             </pre>
-        </section>
-
-        <section>
-            Optimizing property access
         </section>
 
         <section>
@@ -139,21 +117,26 @@
         </section>
 
         <section>
-            What is wrong with the getters and setters?
+            <h3>Returing back to where we started</h3>
+            <p class="fragment">
+                WTF with the getters and setters?
+            </p>
         </section>
 
         <section>
-            Bug in Chrome
+            <h3>Bug in Chrome</h3>
             <img src="img/getter-setter-bug.png" alt="">
-            <a href="https://stackoverflow.com/questions/36338289/object-descriptor-getter-setter-performance-in-recent-chrome-v8-versions">Link to StackOverflow</a>
         </section>
 
         <section>
-            The performance is not stable. It might change over time, because something is broken.
+            <ul>
+                <li>Bugs related to performance do exist</li>
+                <li>Performance might not be stable from one JS engine release to another</li>
+            </ul>
         </section>
 
         <section>
-            How the JS engines optimize our code?
+            <h3>The JS engines are smart</h3>
         </section>
 
         <section data-transition="none">
@@ -338,6 +321,19 @@
             </pre>
         </section>
 
+        <section data-transition="none">
+            <pre class="hljs">
+                <code data-line-numbers data-trim data-noescape>
+                    function calculate() {
+                      const start = Date.now();
+                      const N = 1e6;
+
+                      return (Date.now() - start) / N;
+                    }
+                </code>
+            </pre>
+        </section>
+
         <section>
             <h3>Dead code elimitation</h3>
         </section>
@@ -352,6 +348,34 @@
 
         <section>
             TODO: slides about the compilation stages
+        </section>
+
+        <section>
+            <h3>Conclusion</h3>
+            <ul>
+                <li class="fragment">Don't try to over optimize your code</li>
+                <li class="fragment">The JS engines are smart</li>
+                <li class="fragment">And also buggy</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Thank you.</h2>
+            <h3>Q&A</h3>
+        </section>
+
+        <section>
+            <h3>Further reading</h3>
+            <ul>
+                <li>
+                    <a target="_blank" rel="nofollow" href="https://mathiasbynens.be/notes/shapes-ics">Shapes</a>
+                </li>
+                <li>
+                    <a target="_blank" rel="nofollow" href="https://stackoverflow.com/questions/36338289/object-descriptor-getter-setter-performance-in-recent-chrome-v8-versions">
+                        Getters and Setters bug
+                    </a>
+                </li>
+            </ul>
         </section>
     </div>
 </div>
