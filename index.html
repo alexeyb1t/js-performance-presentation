@@ -35,42 +35,56 @@
         <section>
             <pre class="hljs">
                 <code data-line-numbers data-trim>
-                      let start = Date.now();
+                  let start = Date.now();
+                  const N = 1e6;
 
-                      let obj = {}, a = 0;
+                  let obj = {}, a = 0;
+                  Object.defineProperty(obj, 'a', {
+                    get: () => a,
+                    set: val => a = val
+                  });
 
-                      Object.defineProperty(obj, 'a', {
-                        get: () => a,
-                        set: val => a = val
-                      });
+                  for (let i = 0; i < N; i++) {
+                    obj.a = 2;
+                  }
 
-                      for (let i = 0; i < 1e6; i++) {
-                        obj.a = 2;
-                      }
-
-                      console.log(Date.now() - start);
+                  console.log((Date.now() - start) / N);
                 </code>
             </pre>
+        </section>
+
+        <section>
+            <img src="img/getter-setter-result.png" alt="">
         </section>
 
         <section>
             <pre class="hljs">
                 <code data-line-numbers data-trim>
-                      let start = Date.now();
+                  let start = Date.now();
+                  const N = 1e6;
 
-                      const obj = {};
-                      obj.a = new Box(0);
-                      for (let i = 0; i < 1e6; i++) {
-                        obj.a.set(2);
-                        obj.a.get();
-                      }
+                  const obj = {};
+                  obj.a = new Box(0);
+                  for (let i = 0; i < N; i++) {
+                    obj.a.set(2);
+                    obj.a.get();
+                  }
 
-                      console.log(Date.now() - start);
+                  console.log((Date.now() - start) / N);
                 </code>
             </pre>
         </section>
 
         <section>
+            <img src="img/prototypes-result.png" alt="">
+        </section>
+
+        <section>
+            <h3>Why?</h3>
+        </section>
+
+        <section>
+            <h3>Optimizing property access</h3>
             <pre class="hljs">
                 <code data-line-numbers data-trim>
                     const object = {
@@ -129,6 +143,7 @@
         </section>
 
         <section>
+            <h3>JS engines are buggy</h3>
             <ul>
                 <li>Bugs related to performance do exist</li>
                 <li>Performance might not be stable from one JS engine release to another</li>
@@ -136,7 +151,7 @@
         </section>
 
         <section>
-            <h3>The JS engines are smart</h3>
+            <h3>JS engines are smart</h3>
         </section>
 
         <section data-transition="none">
